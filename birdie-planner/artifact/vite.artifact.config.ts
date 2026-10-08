@@ -10,6 +10,8 @@ export default defineConfig({
   root: here('..'),
   base: './',
   plugins: [react()],
+  // Downloads sind im Artifact-Viewer blockiert → nur Kopieren anbieten
+  define: { 'import.meta.env.VITE_NO_DOWNLOAD': JSON.stringify('1') },
   resolve: {
     alias: [
       { find: 'virtual:pwa-register', replacement: here('./pwaRegisterStub.ts') },

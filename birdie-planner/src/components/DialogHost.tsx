@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDialog } from '../store/dialog';
 
+const CAN_DOWNLOAD = import.meta.env.VITE_NO_DOWNLOAD !== '1';
+
 function saveFile(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
   const a = document.createElement('a');
@@ -53,9 +55,11 @@ export function DialogHost() {
             <textarea ref={textRef} readOnly className="h-48 w-full font-mono text-xs" value={current.text} aria-label="Export-Daten" />
             {copied === 'ok' && <p className="text-sm text-green-800 dark:text-green-400">In die Zwischenablage kopiert.</p>}
             {copied === 'fail' && <p className="text-sm text-amber-800 dark:text-amber-300">Kopieren nicht erlaubt – Text ist markiert, bitte selbst kopieren.</p>}
-            <div className="grid grid-cols-2 gap-2">
+            <div className={CAN_DOWNLOAD ? 'grid grid-cols-2 gap-2' : 'grid'}>
               <button ref={okRef} className="btn-primary" onClick={() => void copy(current.text)}>Kopieren</button>
-              <button className="btn-secondary" onClick={() => saveFile(current.fileName, current.text)}>Als Datei</button>
+              {CAN_DOWNLOAD && (
+                <button className="btn-secondary" onClick={() => saveFile(current.fileName, current.text)}>Als Datei</button>
+              )}
             </div>
             <button className="btn-secondary w-full" onClick={() => close(true)}>Schließen</button>
           </>
