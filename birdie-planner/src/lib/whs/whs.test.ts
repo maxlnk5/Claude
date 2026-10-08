@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { GSV_CH_TABLE } from '../fixtures/gsvCourseHandicaps';
 import { TEST_HISTORY, TEST_PROFILE, TEST_TEE } from '../fixtures/testRecord';
 import type { Hole, Tee } from '../types';
 import {
@@ -262,4 +263,19 @@ describe('Live-Prognose', () => {
     expect(avg?.assumedPoints).toBe(1);
     expect(avg?.ags).toBe(94 + 18);
   });
+});
+
+describe('Course Handicap gegen offizielle DGV-Vorgabentabelle (GSV Düsseldorf)', () => {
+  for (const t of GSV_CH_TABLE) {
+    it(`${t.name}: jeder HCPI −4,0 bis 54,0`, () => {
+      let checked = 0;
+      for (const [lo, hi, ch] of t.rows) {
+        for (let x = Math.round(lo * 10); x <= Math.round(hi * 10); x++) {
+          expect(courseHandicap(x / 10, t.slope, t.cr, t.par), `HCPI ${x / 10}`).toBe(ch);
+          checked++;
+        }
+      }
+      expect(checked).toBe(581);
+    });
+  }
 });

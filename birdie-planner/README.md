@@ -44,8 +44,9 @@ Auf dem Handy: Seite öffnen → „Zum Startbildschirm hinzufügen“.
 
 ## Erste Schritte
 
-1. **Setup → Plätze & Tees:** Die Lochdaten (Par/SI) sind beim ersten Start **Platzhalter**.
-   Bitte mit der echten Scorekarte abgleichen und den Haken „abgeglichen“ setzen.
+1. **Setup → Plätze & Tees:** Vorinstalliert ist der GSV Düsseldorf (Tee gelb und rot, Herren) laut
+   Scorekarte 2025 und DGV-Vorgabentabelle 05/2025. Neue Plätze starten mit **Platzhaltern**: bitte mit
+   der echten Scorekarte abgleichen und den Haken „abgeglichen“ setzen.
 2. **Setup → Scoring Record importieren:** golf.de → *Mein Bereich* → *Scoring Record* → *Detailliert*
    als PDF speichern und hochladen (oder Text einfügen). Vorschau prüfen/korrigieren → Übernehmen.
    Die mitgelieferten Beispiel-SD werden dabei für dieselben Daten ersetzt;
@@ -56,7 +57,7 @@ Auf dem Handy: Seite öffnen → „Zum Startbildschirm hinzufügen“.
 
 | Datei | Inhalt |
 |---|---|
-| `handicap.ts` | Course Handicap `round(HCPI·Slope/113 + CR − Par)`, Spielvorgabe (Faktor), Vorgabeschläge nach SI inkl. CH > 36 und Plus-Handicap (Schläge zurück ab SI 18) |
+| `handicap.ts` | Course Handicap (getestet gegen alle 3.486 Werte der offiziellen GSV-Vorgabentabelle, 6 Tees) – `round(HCPI·Slope/113 + CR − Par)`, Spielvorgabe (Faktor), Vorgabeschläge nach SI inkl. CH > 36 und Plus-Handicap (Schläge zurück ab SI 18) |
 | `scoring.ts` | Stableford `max(0, 2 + Par + Vg − Brutto)`, Netto-Doppelbogey, AGS (Strich/nicht gespielt = NDB) |
 | `differential.ts` | `SD = 113/Slope · (AGS − CR − PCC)`, 1 Dezimale |
 | `exceptional.ts` | **Exceptional Score** (−1 ab 7,0, −2 ab 10,0) – wirkt auf die neue Runde **und** die 19 vorherigen SD (so zeigt es der DGV-Record: „SD inklusive aller Anpassungen“) |
