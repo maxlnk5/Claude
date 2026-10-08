@@ -58,6 +58,12 @@ export interface Round {
   hcpiBefore: number;
   hcpiAfter: number | null;
   exsc: number;
+  /** id des daraus erzeugten (inoffiziellen) Scoring-Record-Eintrags */
+  recordId?: number;
+  /** Record-Einträge, deren SD wegen ExSc angepasst wurden (zum Rückgängigmachen) */
+  adjustedRecordIds?: number[];
+  /** Low HCPI vor dem Abschluss, falls die Runde ihn verändert hat */
+  previousLow?: { lowHcpi: number; lowHcpiDate: string };
 }
 
 /** Turnierart im DGV-Scoring-Record. */
