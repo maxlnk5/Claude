@@ -1,3 +1,4 @@
+import { pdfWorkerUrl } from './pdfWorker';
 import { itemsToLines, type PositionedText } from './pdfLines';
 import { parseScoringRecordText, type ParseResult } from './parser';
 import type { ScoringRecordSource } from './source';
@@ -9,8 +10,7 @@ import type { ScoringRecordSource } from './source';
 export async function extractPdfText(data: ArrayBuffer): Promise<string> {
   // Lazy laden: pdf.js ist groß und wird nur für den Import gebraucht.
   const pdfjs = await import('pdfjs-dist');
-  const workerUrl = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
-  pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+  pdfjs.GlobalWorkerOptions.workerSrc = await pdfWorkerUrl();
   const doc = await pdfjs.getDocument({ data, isEvalSupported: false }).promise;
   const pages: string[] = [];
   for (let p = 1; p <= doc.numPages; p++) {

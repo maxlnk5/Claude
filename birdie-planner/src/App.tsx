@@ -9,6 +9,7 @@ import { SetupScreen } from './screens/SetupScreen';
 import { StartRoundScreen } from './screens/StartRoundScreen';
 import { TargetScreen } from './screens/TargetScreen';
 import { useUi, type Screen } from './store/ui';
+import { DialogHost } from './components/DialogHost';
 
 // Recharts nur laden, wenn der Verlauf geöffnet wird
 const HistoryScreen = lazy(() => import('./screens/HistoryScreen').then((m) => ({ default: m.HistoryScreen })));
@@ -81,6 +82,7 @@ export function App() {
           })}
         </div>
       </nav>
+      <DialogHost />
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import { db } from '../db/db';
-import { saveHoleScore } from '../db/actions';
+import { deleteRound, saveHoleScore } from '../db/actions';
 import { useActiveRound, useRound } from '../db/hooks';
 import { Banner, Stat } from '../components/ui';
 import { useRoundModel } from '../hooks/useRoundModel';
 import { fmt1, fmtDate, fmtHcpi } from '../lib/format';
 import type { HoleLine } from '../lib/whs';
+import { confirmDialog } from '../store/dialog';
 import { useUi } from '../store/ui';
 
 function Sum({ label, lines }: { label: string; lines: HoleLine[] }) {
@@ -122,7 +123,19 @@ export function ScorecardScreen() {
         </table>
       </div>
       {editable ? (
-        <button className="btn-primary min-h-[56px] w-full" onClick={() => go('finish')}>Runde abschließen</button>
+        <div className="grid gap-2">
+          <button className="btn-primary min-h-[56px] w-full" onClick={() => go('finish')}>Runde abschließen</button>
+          <button
+            className="btn-secondary w-full"
+            onClick={async () => {
+              if (!(await confirmDialog('Laufende Runde verwerfen? Die Eingaben gehen verloren.', 'Verwerfen'))) return;
+              await deleteRound(db, round);
+              go('start');
+            }}
+          >
+            Runde verwerfen
+          </button>
+        </div>
       ) : (
         <button className="btn-secondary w-full" onClick={() => { viewRound(null); go('history'); }}>Zurück zum Verlauf</button>
       )}

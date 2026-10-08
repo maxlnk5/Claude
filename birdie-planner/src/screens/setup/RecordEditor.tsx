@@ -4,7 +4,8 @@ import { useRecords } from '../../db/hooks';
 import { RecordTable } from '../../components/RecordTable';
 import { Card } from '../../components/ui';
 import { sortRecords } from '../../lib/derived';
-import { todayIso } from '../../lib/format';
+import { fmtDate, todayIso } from '../../lib/format';
+import { confirmDialog } from '../../store/dialog';
 
 /** ManualEditor: Scoring-Record-Einträge von Hand ergänzen und korrigieren. */
 export function RecordEditor() {
@@ -39,9 +40,9 @@ export function RecordEditor() {
               const id = rows[i]?.id;
               if (id !== undefined) void db.records.update(id, patch);
             }}
-            onDelete={(i) => {
+            onDelete={async (i) => {
               const r = rows[i];
-              if (r?.id !== undefined && confirm(`Eintrag vom ${r.date} löschen?`)) void db.records.delete(r.id);
+              if (r?.id !== undefined && (await confirmDialog(`Eintrag vom ${fmtDate(r.date)} löschen?`))) void db.records.delete(r.id);
             }}
           />
           <p className="mt-2 text-xs muted">Änderungen werden sofort gespeichert. Die letzten 20 SD zählen für den Index.</p>

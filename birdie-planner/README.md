@@ -39,6 +39,10 @@ Bei Netlify als Base Directory `birdie-planner` angeben.
 **GitHub Pages:** Unter *Settings → Pages* als Quelle „GitHub Actions“ wählen, dann den Workflow
 *„Birdie Planner → GitHub Pages“* (`.github/workflows/birdie-planner-pages.yml`) manuell starten.
 
+**claude.ai-Artifact (zum schnellen Ausprobieren am Handy):** `npm run build:artifact` erzeugt
+`dist-artifact/birdie-planner.html` (alles inline) und `dist-artifact/pdf.worker.min.mjs`. Dort gibt es
+keinen Service Worker (also kein Offline-Modus), und die Daten liegen nur im Browser des jeweiligen Geräts.
+
 Jeder andere statische Hoster geht auch: Inhalt von `dist/` hochladen.
 Auf dem Handy: Seite öffnen → „Zum Startbildschirm hinzufügen“.
 

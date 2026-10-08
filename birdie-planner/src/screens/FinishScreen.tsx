@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { db } from '../db/db';
-import { downloadJson, finishRound } from '../db/actions';
+import { finishRound } from '../db/actions';
 import { useActiveRound } from '../db/hooks';
 import { Banner, Card, DISCLAIMER, IntInput, Stat } from '../components/ui';
 import { useRoundModel } from '../hooks/useRoundModel';
 import { fmt1, fmtDelta, fmtHcpi } from '../lib/format';
 import { round1 } from '../lib/whs';
 import { useUi } from '../store/ui';
+import { exportDialog } from '../store/dialog';
 
 export function FinishScreen() {
   const round = useActiveRound();
@@ -31,7 +32,7 @@ export function FinishScreen() {
   const delta = r.hcpi === null ? null : round1(r.hcpi - round.hcpiBefore);
 
   const exportRound = () =>
-    downloadJson(`runde-${round.date}.json`, {
+    exportDialog('Runde (JSON)', `runde-${round.date}.json`, {
       round,
       course: model.course.name,
       tee: model.tee,

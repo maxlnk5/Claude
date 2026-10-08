@@ -7,6 +7,7 @@ import { checkTee } from '../lib/derived';
 import { fmtHcpi, todayIso } from '../lib/format';
 import { courseHandicap, playingHandicap } from '../lib/whs';
 import { useUi } from '../store/ui';
+import { confirmDialog } from '../store/dialog';
 
 export function StartRoundScreen() {
   const profile = useProfile();
@@ -42,7 +43,7 @@ export function StartRoundScreen() {
           </button>
           <button
             className="btn-secondary"
-            onClick={() => confirm('Laufende Runde verwerfen? Die Eingaben gehen verloren.') && void deleteRound(db, active)}
+            onClick={async () => (await confirmDialog('Laufende Runde verwerfen? Die Eingaben gehen verloren.', 'Verwerfen')) && void deleteRound(db, active)}
           >
             Runde verwerfen
           </button>

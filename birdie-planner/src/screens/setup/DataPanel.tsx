@@ -1,10 +1,11 @@
 import { db } from '../../db/db';
-import { downloadJson, exportAll } from '../../db/actions';
+import { exportAll } from '../../db/actions';
 import { ensureSeed } from '../../db/seed';
 import { useRecords } from '../../db/hooks';
 import { Card, Field, Segmented } from '../../components/ui';
 import { todayIso } from '../../lib/format';
 import { useUi, type Theme } from '../../store/ui';
+import { confirmDialog, exportDialog } from '../../store/dialog';
 
 export function DataPanel() {
   const { theme, setTheme } = useUi();
@@ -24,21 +25,21 @@ export function DataPanel() {
         />
       </Field>
       <div className="mt-4 grid gap-2">
-        <button className="btn-secondary" onClick={async () => downloadJson(`birdie-planner-${todayIso()}.json`, await exportAll(db))}>
+        <button className="btn-secondary" onClick={async () => void exportDialog('Alle Daten (JSON)', `birdie-planner-${todayIso()}.json`, await exportAll(db))}>
           Alle Daten als JSON exportieren
         </button>
         {seedCount > 0 && (
           <button
             className="btn-secondary"
-            onClick={() => confirm(`${seedCount} Testdaten-Einträge löschen?`) && void db.records.where('origin').equals('seed').delete()}
+            onClick={async () => (await confirmDialog(`${seedCount} Beispiel-Einträge löschen?`)) && void db.records.where('origin').equals('seed').delete()}
           >
-            Testdaten entfernen ({seedCount})
+            Beispieldaten entfernen ({seedCount})
           </button>
         )}
         <button
           className="btn-danger"
           onClick={async () => {
-            if (!confirm('Wirklich ALLE lokalen Daten löschen (Profil, Plätze, Runden, Record)?')) return;
+            if (!(await confirmDialog('Wirklich ALLE lokalen Daten löschen (Profil, Plätze, Runden, Record)?', 'Alles löschen'))) return;
             await Promise.all([db.profile.clear(), db.courses.clear(), db.rounds.clear(), db.records.clear()]);
             await ensureSeed(db);
           }}

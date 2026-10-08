@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "build:artifact": "vite build --config artifact/vite.artifact.config.ts && node artifact/assemble.mjs"
   },
   "license": "MIT",
   "dependencies": {

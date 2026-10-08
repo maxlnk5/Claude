@@ -5,6 +5,7 @@ import { placeholderHoles } from '../../db/seed';
 import { Banner, Card, DecimalInput, Field, IntInput } from '../../components/ui';
 import { checkTee } from '../../lib/derived';
 import type { Course, Tee } from '../../lib/types';
+import { confirmDialog, noticeDialog } from '../../store/dialog';
 
 export function CourseEditor() {
   const courses = useCourses();
@@ -133,8 +134,8 @@ export function CourseEditor() {
                 {course.tees.length > 1 && (
                   <button
                     className="btn-secondary flex-1"
-                    onClick={() => {
-                      if (!confirm(`Tee ${tee.name} löschen?`)) return;
+                    onClick={async () => {
+                      if (!(await confirmDialog(`Tee ${tee.name} löschen?`))) return;
                       saveCourse({ ...course, tees: course.tees.filter((t) => t !== tee) });
                       setTeeIdx(0);
                     }}
@@ -145,9 +146,9 @@ export function CourseEditor() {
                 <button
                   className="btn-secondary flex-1"
                   onClick={async () => {
-                    if (course.id === undefined || !confirm(`Platz ${course.name} löschen?`)) return;
+                    if (course.id === undefined || !(await confirmDialog(`Platz ${course.name} löschen?`))) return;
                     if ((await db.rounds.where('courseId').equals(course.id).count()) > 0) {
-                      alert('Auf diesem Platz gibt es gespeicherte Runden – bitte zuerst die Runden löschen.');
+                      await noticeDialog('Auf diesem Platz gibt es gespeicherte Runden – bitte zuerst die Runden löschen.');
                       return;
                     }
                     await db.courses.delete(course.id);

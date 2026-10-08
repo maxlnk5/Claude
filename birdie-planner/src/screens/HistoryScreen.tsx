@@ -7,6 +7,7 @@ import { useIsDark } from '../hooks/useIsDark';
 import { fmt1, fmtDate, fmtHcpi } from '../lib/format';
 import { buildHistory, type HistoryPoint } from '../lib/history';
 import { useUi } from '../store/ui';
+import { confirmDialog } from '../store/dialog';
 
 // Validierte Kategorienfarben (Blau/Orange), je Modus eigene Stufe.
 const COLORS = {
@@ -97,7 +98,7 @@ export function HistoryScreen() {
                   <button
                     className="btn-secondary min-h-[44px] px-3 text-sm"
                     aria-label="Runde löschen"
-                    onClick={() => confirm('Runde löschen? Der inoffizielle Record-Eintrag und eine ExSc-Anpassung werden zurückgenommen.') && void deleteRound(db, r)}
+                    onClick={async () => (await confirmDialog('Runde löschen? Der inoffizielle Record-Eintrag und eine ExSc-Anpassung werden zurückgenommen.')) && void deleteRound(db, r)}
                   >
                     ✕
                   </button>
